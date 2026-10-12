@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+:root,
+[data-theme="light"],
+.light {
+  /* Minimalist Editorial Design System (Ethan Clark Reference) */
+  --background: #FFFFFF;
+  --background-secondary: #F7F8FA;
+  --background-subtle: #FAFAFB;
+  --background-muted: #F4F4F6;
+  --surface: #FFFFFF;
+  --surface-hover: #F6F6F9;
+  --surface-card: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+
+  --foreground: #101114;
+  --foreground-secondary: #525866;
+  --foreground-muted: #64748B;
+  --foreground-subtle: #94A3B8;
+
+  --border: #E4E7EC;
+  --border-subtle: #EFEFF2;
+  --border-strong: #D4D4D8;
+
+  --accent: #1677D2;
+  --accent-hover: #095DAF;
+  --accent-bright: #1688D4;
+
+  --glow: rgba(22, 119, 210, 0.08);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.07);
+
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --header-border: rgba(228, 231, 236, 0.8);
+  --header-scrolled-bg: rgba(255, 255, 255, 0.94);
+  --header-scrolled-border: rgba(228, 231, 236, 0.9);
+
+  --pill-bg: #101114;
+  --pill-text: #FFFFFF;
+  --pill-hover: #27272A;
+
+  --code-bg: #F4F4F6;
+  --badge-bg: #F4F4F6;
+}
+
+[data-theme="dark"],
+.dark {
+  /* Original Java Solutions Deep Navy & Cyan Identity */
+  --background: #050B14;
+  --background-secondary: #081525;
+  --background-subtle: #0B1C30;
+  --background-muted: #0E223B;
+  --surface: #0E2034;
+  --surface-hover: #142B45;
+  --surface-card: #0A192C;
+  --surface-elevated: #11263E;
+
+  --foreground: #F3F7FC;
+  --foreground-secondary: #A9B9CC;
+  --foreground-muted: #7B93AD;
+  --foreground-subtle: #56708C;
+
+  --border: rgba(110, 170, 220, 0.20);
+  --border-subtle: rgba(110, 170, 220, 0.12);
+  --border-strong: rgba(110, 170, 220, 0.35);
+
+  --accent: #1688D4;
+  --accent-hover: #6BDFFF;
+  --accent-bright: #42D5FF;
+
+  --glow: rgba(66, 213, 255, 0.22);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.6);
+
+  --header-bg: rgba(5, 11, 20, 0.85);
+  --header-border: rgba(110, 170, 220, 0.16);
+  --header-scrolled-bg: rgba(5, 11, 20, 0.94);
+  --header-scrolled-border: rgba(110, 170, 220, 0.25);
+
+  --pill-bg: #1688D4;
+  --pill-text: #FFFFFF;
+  --pill-hover: #42D5FF;
+
+  --code-bg: #071526;
+  --badge-bg: #0C1E34;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-subtle: var(--background-subtle);
+  --color-background-muted: var(--background-muted);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-card: var(--surface-card);
+  --color-surface-elevated: var(--surface-elevated);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-bright: var(--accent-bright);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Editorial Spacing & Radii */
+  --radius-pill: 9999px;
+  --radius-card: 1.25rem;
+  --radius-sm: 0.5rem;
+}
+
+/* Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.55;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+::selection {
+  background-color: var(--foreground);
+  color: var(--background);
+}
+
+[data-theme="dark"] ::selection {
+  background-color: #1688D4;
+  color: #FFFFFF;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Custom Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-subtle);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-subtle);
+}
+
+/* Editorial Minimalist Utility Classes */
+.editorial-title {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  letter-spacing: -0.035em;
+}
+
+.editorial-caps {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.hairline-border {
+  border: 1px solid var(--border);
+}
+
+.subtle-border-b {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.subtle-border-t {
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Dark Theme Cinematic Depth Effects */
+[data-theme="dark"] .hero-glow-radial {
+  background: radial-gradient(circle at 50% 20%, rgba(22, 136, 212, 0.15) 0%, rgba(66, 213, 255, 0.05) 45%, transparent 75%);
+}
+
+[data-theme="dark"] .card-cyan-hover:hover {
+  border-color: rgba(66, 213, 255, 0.45);
+  box-shadow: 0 0 25px rgba(22, 136, 212, 0.18);
+}
+
+/* Smooth Image Container Treatment */
+.image-reveal {
+  overflow: hidden;
+  position: relative;
+}
+
+.image-reveal img {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-reveal:hover img {
+  transform: scale(1.04);
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
