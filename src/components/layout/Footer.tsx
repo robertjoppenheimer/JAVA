@@ -49,7 +49,7 @@ export function Footer() {
           <div className="lg:col-span-5 pr-0 lg:pr-8">
             <Link
               href="/"
-              aria-label="Java Solutions — Home"
+              aria-label="Autocratic — Home"
               className="inline-block mb-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-bright)] rounded-sm"
             >
               <Logo variant="full" size={28} />
@@ -113,10 +113,13 @@ export function Footer() {
                 <span className="text-xs text-[var(--foreground-subtle)] block uppercase tracking-wider mb-0.5 font-mono">
                   Direct Inquiries
                 </span>
-                <span className="font-medium text-[var(--foreground)] block">
-                  contact@javasolutions.com
-                </span>
-                <span className="text-[11px] text-[var(--foreground-subtle)]">(to be confirmed)</span>
+                <Link
+                  href="/contact"
+                  className="font-medium text-[var(--foreground)] hover:text-[var(--accent-bright)] transition-colors block"
+                >
+                  Consultation Form
+                </Link>
+                <span className="text-[11px] text-[var(--foreground-subtle)]">(Direct submission)</span>
               </li>
               <li>
                 <span className="text-xs text-[var(--foreground-subtle)] block uppercase tracking-wider mb-0.5 font-mono">
@@ -132,7 +135,7 @@ export function Footer() {
 
         {/* Bottom Bar: Copyright & Legal */}
         <div className="pt-8 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--foreground-muted)]">
-          <p>© {year} Java Solutions. All rights reserved.</p>
+          <p>© {year} Autocratic. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link
               href="/privacy"

@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms governing use of the Java Solutions website and preliminary engagements.",
+  description: "Terms governing use of the Autocratic website and preliminary engagements.",
 };
 
 export default function TermsPage() {
@@ -55,7 +55,7 @@ export default function TermsPage() {
             </h2>
             <p>
               All branding marks, logos, technical blueprints, and written documentation published
-              on this site are the intellectual property of Java Solutions unless attributed
+              on this site are the intellectual property of Autocratic unless attributed
               to third-party frameworks. You may not reproduce or republish materials without prior
               written consent.
             </p>
@@ -77,8 +77,10 @@ export default function TermsPage() {
               4. Governing Inquiries
             </h2>
             <p>
-              For inquiries regarding contractual terms, please reach our administrative team at{" "}
-              <span className="font-semibold text-[var(--foreground)]">contact@javasolutions.com</span>.
+              For inquiries regarding contractual terms, please reach our administrative team via our contact page at{" "}
+              <Link href="/contact" className="font-semibold text-[var(--foreground)] hover:text-[var(--accent-bright)] underline">
+                autocratic.in/contact
+              </Link>.
             </p>
           </div>
         </div>

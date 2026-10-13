@@ -114,7 +114,7 @@ function ContactFormInner() {
         setSubmissionResult(data);
       }
     } catch {
-      setServerError("A network error occurred. Please check your connection or contact us directly at contact@javasolutions.com.");
+      setServerError("A network error occurred. Please check your connection and try submitting again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -399,7 +399,7 @@ function ContactFormInner() {
                 </button>
 
                 <span className="text-[11px] font-mono text-[var(--foreground-muted)]">
-                  Response SLA: &lt; 24h
+                  Target Response: &lt; 1 Business Day
                 </span>
               </div>
             </form>
@@ -424,10 +424,10 @@ function ContactFormInner() {
                   Official Communications
                 </h3>
                 <p className="text-sm font-medium text-[var(--foreground)] mt-0.5">
-                  contact@javasolutions.com
+                  Direct Intake Form
                 </p>
                 <p className="text-xs text-[var(--foreground-muted)] mt-0.5">
-                  (official email to be confirmed)
+                  (Domain inbox pending DNS MX configuration)
                 </p>
               </div>
             </li>

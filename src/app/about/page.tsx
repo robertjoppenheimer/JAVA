@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Java Solutions",
+  title: "About",
   description:
-    "Java Solutions is an enterprise IT services consultancy focused on helping modern organizations engineer reliable, scalable, and secure technology foundations.",
+    "Autocratic is an enterprise IT services consultancy focused on helping modern organizations engineer reliable, scalable, and secure technology foundations.",
 };
 
 export default function AboutPage() {
@@ -50,7 +50,7 @@ export default function AboutPage() {
           </div>
 
           <p className="max-w-2xl text-lg sm:text-xl text-[var(--foreground-secondary)] font-normal leading-relaxed">
-            Java Solutions advises, architects, and implements dependable IT environments
+            Autocratic advises, architects, and implements dependable IT environments
             that keep operations running seamlessly and securely.
           </p>
         </div>
@@ -72,13 +72,13 @@ export default function AboutPage() {
             <div className="lg:col-span-7 space-y-6 text-base sm:text-lg text-[var(--foreground-secondary)] font-normal leading-relaxed">
               <p>
                 Founded on the belief that mission-critical technology should be straightforward,
-                robust, and properly documented, Java Solutions operates as an extension of
+                robust, and properly documented, Autocratic operates as an extension of
                 our clients’ internal operations.
               </p>
               <p>
                 Too often, organizations struggle with fragmented vendors: one provider for cabling,
                 another for AWS hosting, a separate team for ERP software, and an external agency for web.
-                Java Solutions provides a cohesive engineering partner across all seven disciplines.
+                Autocratic provides a cohesive engineering partner across all seven disciplines.
               </p>
               <p className="text-sm sm:text-base text-[var(--foreground-muted)]">
                 We believe that good engineering is quiet. When your networks are properly tuned,

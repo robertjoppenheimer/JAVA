@@ -151,7 +151,7 @@ export function HeroVisualComposition({ scrollContainerRef }: HeroVisualProps) {
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
             <span className="text-neutral-100 font-semibold tracking-wider flex items-center gap-2">
               <Terminal className="w-3.5 h-3.5 text-[#42D5FF]" />
-              <span>JAVA_ENTERPRISE_CORE // NODE_ALPHA</span>
+              <span>AUTOCRATIC_CORE // NODE_ALPHA</span>
             </span>
           </div>
           <div className="flex items-center gap-4 text-neutral-400 text-[11px]">

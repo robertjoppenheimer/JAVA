@@ -64,7 +64,7 @@ export function Header() {
             <Link
               href="/"
               className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-bright)] rounded-md"
-              aria-label="Java Solutions — Home"
+              aria-label="Autocratic — Home"
             >
               <Logo variant="full" size={26} />
             </Link>
@@ -212,7 +212,7 @@ export function Header() {
               <span>Available for new projects</span>
             </div>
             <p className="text-xs text-[var(--foreground-muted)]">
-              Inquiries: contact@javasolutions.com
+              Inquiries: Direct via Consultation Form
             </p>
           </div>
         </div>

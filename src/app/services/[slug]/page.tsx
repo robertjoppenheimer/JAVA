@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getServiceBySlug(slug);
   if (!service) return { title: "Service Not Found" };
   return {
-    title: `${service.title} — Java Solutions`,
+    title: service.title,
     description: service.description,
   };
 }

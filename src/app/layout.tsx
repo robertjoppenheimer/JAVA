@@ -7,15 +7,16 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://javasolutions.com"),
+  metadataBase: new URL("https://autocratic.in"),
   title: {
-    default: "Java Solutions — Enterprise IT Systems & Modern Solutions",
-    template: "%s | Java Solutions",
+    default: "Autocratic — Enterprise IT Systems & Modern Solutions",
+    template: "%s | Autocratic",
   },
   description:
     "End-to-end enterprise IT solutions — systems administration, high-resilience networking, AWS cloud architecture, Odoo ERP, and software engineering.",
   keywords: [
-    "IT solutions",
+    "Autocratic",
+    "enterprise IT",
     "IT infrastructure",
     "networking",
     "cloud solutions",
@@ -26,31 +27,67 @@ export const metadata: Metadata = {
     "IT support",
     "managed IT services",
   ],
-  authors: [{ name: "Java Solutions" }],
-  creator: "Java Solutions",
-  publisher: "Java Solutions",
+  authors: [{ name: "Autocratic" }],
+  creator: "Autocratic",
+  publisher: "Autocratic",
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Java Solutions — Enterprise IT Systems & Modern Solutions",
+    url: "https://autocratic.in",
+    title: "Autocratic — Enterprise IT Systems & Modern Solutions",
     description:
       "End-to-end enterprise IT solutions — systems administration, high-resilience networking, AWS cloud architecture, Odoo ERP, and software engineering.",
-    siteName: "Java Solutions",
+    siteName: "Autocratic",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Java Solutions — Enterprise IT Systems & Modern Solutions",
+    title: "Autocratic — Enterprise IT Systems & Modern Solutions",
     description:
       "End-to-end enterprise IT solutions — systems administration, networking, cloud, and Odoo ERP.",
+  },
+  alternates: {
+    canonical: "https://autocratic.in",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://autocratic.in/#organization",
+      name: "Autocratic",
+      url: "https://autocratic.in",
+      logo: "https://autocratic.in/favicon.svg",
+      description:
+        "Enterprise IT solutions consultancy providing infrastructure, networking, AWS cloud, Odoo ERP, and software engineering.",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://autocratic.in/#website",
+      url: "https://autocratic.in",
+      name: "Autocratic",
+      publisher: {
+        "@id": "https://autocratic.in/#organization",
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -65,8 +102,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function(){
   try {
-    var key = 'java-solutions-theme';
-    var stored = localStorage.getItem(key);
+    var key = 'autocratic-theme';
+    var stored = localStorage.getItem(key) || localStorage.getItem('java-solutions-theme');
     var theme = stored;
     if (!theme) {
       var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -83,6 +120,10 @@ export default function RootLayout({
   } catch (e) {}
 })();`,
           }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased transition-colors duration-200">

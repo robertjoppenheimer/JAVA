@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy policy and client data handling practices for Java Solutions.",
+  description: "Privacy policy and client data handling practices for Autocratic.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
             Privacy Policy
           </h1>
           <p className="text-base text-[var(--foreground-muted)] font-normal">
-            Last updated: October 2026. How Java Solutions protects and handles client information.
+            Last updated: October 2026. How Autocratic protects and handles client information.
           </p>
         </div>
       </section>
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
               1. Information We Collect
             </h2>
             <p>
-              When you submit a consultation request or communicate with Java Solutions,
+              When you submit a consultation request or communicate with Autocratic,
               we collect basic contact and technical scope details including your name,
               business email address, organization name, and descriptive notes regarding your
               IT infrastructure requirements.
@@ -89,7 +89,10 @@ export default function PrivacyPolicyPage() {
             </h2>
             <p>
               For inquiries regarding data privacy or to request the deletion of preliminary inquiry
-              records, please contact us at <span className="font-semibold text-[var(--foreground)]">contact@javasolutions.com</span>.
+              records, please submit a formal inquiry via our contact page at{" "}
+              <Link href="/contact" className="font-semibold text-[var(--foreground)] hover:text-[var(--accent-bright)] underline">
+                autocratic.in/contact
+              </Link>.
             </p>
           </div>
         </div>

@@ -13,7 +13,8 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const THEME_STORAGE_KEY = "java-solutions-theme";
+const THEME_STORAGE_KEY = "autocratic-theme";
+const LEGACY_THEME_STORAGE_KEY = "java-solutions-theme";
 
 function subscribeToTheme(callback: () => void) {
   if (typeof window === "undefined") return () => {};
@@ -24,7 +25,7 @@ function subscribeToTheme(callback: () => void) {
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const handleMediaChange = () => {
     try {
-      const stored = localStorage.getItem(THEME_STORAGE_KEY);
+      const stored = localStorage.getItem(THEME_STORAGE_KEY) || localStorage.getItem(LEGACY_THEME_STORAGE_KEY);
       if (!stored) {
         const nextTheme = mediaQuery.matches ? "dark" : "light";
         const root = document.documentElement;
@@ -60,7 +61,7 @@ function getThemeSnapshot(): Theme {
   }
 
   try {
-    const stored = localStorage.getItem(THEME_STORAGE_KEY) as Theme;
+    const stored = (localStorage.getItem(THEME_STORAGE_KEY) || localStorage.getItem(LEGACY_THEME_STORAGE_KEY)) as Theme;
     if (stored === "light" || stored === "dark") return stored;
   } catch {
     // Ignore storage errors

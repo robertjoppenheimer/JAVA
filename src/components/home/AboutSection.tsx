@@ -53,7 +53,7 @@ export function AboutSection() {
             [ 02 // PHILOSOPHY ]
           </span>
           <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--foreground-muted)]">
-            About Java Solutions
+            About Autocratic
           </span>
         </motion.div>
 
@@ -76,7 +76,7 @@ export function AboutSection() {
 
           <div className="lg:col-span-5 space-y-6 text-base sm:text-lg text-[var(--foreground-secondary)] font-normal leading-relaxed">
             <p>
-              Java Solutions is an enterprise IT consultancy built on technical clarity.
+              Autocratic is an enterprise IT consultancy built on technical clarity.
               Modern businesses rely heavily on seamless network connectivity, dependable
               cloud infrastructure, and integrated enterprise software to operate effectively.
             </p>

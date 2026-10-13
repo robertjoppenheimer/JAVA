@@ -29,7 +29,7 @@ export function Logo({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className={className}
-        aria-label="Java Solutions emblem"
+        aria-label="Autocratic emblem"
         role="img"
       >
         {/* Geometric Monogram */}
@@ -43,13 +43,22 @@ export function Logo({
           strokeWidth="1.75"
         />
         <path
-          d="M11 10H21M16 10V21C16 22.5 14.8 23.5 13 23.5H11"
+          d="M16 8L9.5 23H13L16 16L19 23H22.5L16 8Z"
           stroke={markColor}
-          strokeWidth="1.75"
+          strokeWidth="1.6"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <circle cx="21" cy="21" r="1.5" fill={dotColor} />
+        <line
+          x1="12.5"
+          y1="18.5"
+          x2="19.5"
+          y2="18.5"
+          stroke={markColor}
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+        <circle cx="21" cy="9.5" r="1.5" fill={dotColor} />
       </svg>
     );
   }
@@ -57,7 +66,7 @@ export function Logo({
   return (
     <div
       className={`inline-flex items-center gap-3 select-none ${className}`}
-      aria-label="Java Solutions"
+      aria-label="Autocratic"
       role="img"
     >
       {/* Precision Monogram Mark */}
@@ -80,28 +89,37 @@ export function Logo({
           strokeWidth="1.75"
         />
         <path
-          d="M11 10H21M16 10V21C16 22.5 14.8 23.5 13 23.5H11"
+          d="M16 8L9.5 23H13L16 16L19 23H22.5L16 8Z"
           stroke={markColor}
-          strokeWidth="1.75"
+          strokeWidth="1.6"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <circle cx="21" cy="21" r="1.5" fill={dotColor} />
+        <line
+          x1="12.5"
+          y1="18.5"
+          x2="19.5"
+          y2="18.5"
+          stroke={markColor}
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+        <circle cx="21" cy="9.5" r="1.5" fill={dotColor} />
       </svg>
 
       {/* Confident Wordmark */}
       <div className="flex flex-col leading-none">
         <span
           className="text-[0.9375rem] font-bold tracking-tight transition-colors duration-200"
-          style={{ color: textColor, letterSpacing: "-0.025em" }}
+          style={{ color: textColor, letterSpacing: "-0.015em" }}
         >
-          JAVA
+          AUTOCRATIC
         </span>
         <span
           className="text-[0.5625rem] font-medium tracking-[0.2em] uppercase mt-0.5 transition-colors duration-200"
           style={{ color: subtextColor }}
         >
-          SOLUTIONS
+          ENTERPRISE IT
         </span>
       </div>
     </div>

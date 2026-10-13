@@ -90,7 +90,12 @@ export function ConsultationCTASection() {
             <span className="block text-xs uppercase tracking-wider text-[var(--foreground-subtle)] dark:text-[#7B93AD] font-mono mb-1">
               Inquiries
             </span>
-            <span className="text-[var(--foreground)] dark:text-[#F3F7FC] font-medium">contact@javasolutions.com</span>
+            <Link
+              href="/contact"
+              className="text-[var(--foreground)] dark:text-[#F3F7FC] font-medium hover:text-[var(--accent-bright)] dark:hover:text-[#42D5FF] transition-colors"
+            >
+              Direct Consultation Form
+            </Link>
           </div>
           <div>
             <span className="block text-xs uppercase tracking-wider text-[var(--foreground-subtle)] dark:text-[#7B93AD] font-mono mb-1">

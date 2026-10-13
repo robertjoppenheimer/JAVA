@@ -12,30 +12,33 @@ interface ContactRequestBody {
   renderedAt?: number;
 }
 
-// In-memory rate limiting map for basic spam mitigation
-// Maps IP to array of submission timestamps
+// In-memory rate limiting map for basic per-instance spam mitigation
+// Note on serverless runtimes: This rate limiter operates per serverless lambda instance.
+// For durable global distributed rate limiting across all regions, Upstash Redis or Cloudflare Turnstile should be integrated.
 const rateLimitMap = new Map<string, number[]>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 5;
 
-// Clean up stale rate limit entries every 10 minutes
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, timestamps] of rateLimitMap.entries()) {
-    const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (valid.length === 0) {
-      rateLimitMap.delete(ip);
-    } else {
-      rateLimitMap.set(ip, valid);
+function pruneRateLimitMap(now: number) {
+  if (rateLimitMap.size > 200) {
+    for (const [ip, timestamps] of rateLimitMap.entries()) {
+      const valid = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+      if (valid.length === 0) {
+        rateLimitMap.delete(ip);
+      } else {
+        rateLimitMap.set(ip, valid);
+      }
     }
   }
-}, 10 * 60 * 1000);
+}
 
 export async function POST(req: NextRequest) {
   try {
+    const now = Date.now();
+    pruneRateLimitMap(now);
+
     // 1. Rate limiting by client IP
     const clientIp = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "127.0.0.1";
-    const now = Date.now();
     const timestamps = rateLimitMap.get(clientIp) || [];
     const recentRequests = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
 
@@ -65,12 +68,11 @@ export async function POST(req: NextRequest) {
 
     const { name, email, company, service, message, website, renderedAt } = body;
 
-    // 3. Honeypot check (bots will fill out the hidden 'website' field)
+    // 3. Honeypot check (bots fill out the hidden 'website' field)
     if (website && website.trim().length > 0) {
-      // Return a simulated success to confuse automated bot crawlers without processing
       return NextResponse.json({
         success: true,
-        referenceId: `JS-${Date.now().toString(36).toUpperCase()}`,
+        referenceId: `AC-${Date.now().toString(36).toUpperCase()}`,
         message: "Enquiry received.",
       });
     }
@@ -131,7 +133,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 6. Generate official unique Reference ID
-    const referenceId = `JS-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const referenceId = `AC-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
     const submissionRecord = {
       referenceId,
       timestamp: new Date().toISOString(),
@@ -146,24 +148,35 @@ export async function POST(req: NextRequest) {
     // 7. Production forwarding integration
     // If an external webhook is configured (e.g. Slack/Discord webhook, CRM endpoint, Zapier)
     const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
+    let deliveredDurable = false;
     if (webhookUrl) {
       try {
-        await fetch(webhookUrl, {
+        const webhookRes = await fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            text: `*New Java Solutions Consultation Request* [${referenceId}]\n*Name:* ${submissionRecord.name}\n*Email:* ${submissionRecord.email}\n*Company:* ${submissionRecord.company}\n*Service:* ${submissionRecord.service}\n*Message:*\n${submissionRecord.message}`,
+            text: `*New Autocratic Consultation Request* [${referenceId}]\n*Name:* ${submissionRecord.name}\n*Email:* ${submissionRecord.email}\n*Company:* ${submissionRecord.company}\n*Service:* ${submissionRecord.service}\n*Message:*\n${submissionRecord.message}`,
             record: submissionRecord,
           }),
         });
+        if (webhookRes.ok) {
+          deliveredDurable = true;
+        } else {
+          console.warn(`[Contact API] Webhook dispatch returned HTTP ${webhookRes.status}`);
+        }
       } catch (err) {
-        console.error("[Contact API] Webhook dispatch error:", err);
-        // Do not fail the user's submission if the external notification webhook timed out
+        console.error("[Contact API] Webhook dispatch network error:", err);
       }
+    } else {
+      console.warn(
+        `[Contact API] Notice: CONTACT_WEBHOOK_URL is not configured in server environment. Submission recorded in runtime server logs only.`
+      );
     }
 
-    // Log the validated inquiry on the server
-    console.log(`[Contact API] Valid inquiry recorded: ${referenceId} from ${submissionRecord.email} for ${submissionRecord.service}`);
+    // Always log the validated inquiry on the server
+    console.log(
+      `[Contact API] Inquiry recorded: ${referenceId} from ${submissionRecord.email} for ${submissionRecord.service} (webhook delivered: ${deliveredDurable})`
+    );
 
     // Return confirmed submission
     return NextResponse.json({
@@ -172,14 +185,16 @@ export async function POST(req: NextRequest) {
       service: submissionRecord.service,
       name: submissionRecord.name,
       receivedAt: submissionRecord.timestamp,
-      message: "Your consultation request has been successfully recorded. Our solutions engineer will review and respond within 1 business day.",
+      message:
+        "Your consultation request has been recorded. A solutions engineer will review your specifications.",
     });
   } catch (error) {
     console.error("[Contact API] Unexpected error:", error);
     return NextResponse.json(
       {
         success: false,
-        error: "An unexpected server error occurred while processing your request. Please try again or email contact@javasolutions.com directly.",
+        error:
+          "An unexpected server error occurred while processing your request. Please try again or submit an inquiry through our contact form.",
       },
       { status: 500 }
     );

@@ -1,6 +1,9 @@
-# Java Solutions — IT Services Website
+# Autocratic — Enterprise IT Solutions
 
-Corporate website for **Java Solutions**, an IT services company providing end-to-end technology solutions for local and international businesses.
+Official website for **Autocratic**, an enterprise IT services consultancy providing end-to-end technology solutions across infrastructure, networking, cloud architecture, Odoo ERP, and software engineering.
+
+- **Production Origin**: `https://autocratic.in`
+- **Preferred Canonical Hostname**: `autocratic.in`
 
 ## Tech Stack
 
@@ -16,13 +19,13 @@ Corporate website for **Java Solutions**, an IT services company providing end-t
 ## Local Development
 
 ### Prerequisites
-- Node.js 18+ (Node.js 20 LTS recommended)
+- Node.js 18+ (Node.js 20+ LTS recommended)
 - npm (included with Node.js)
 
 ### Setup & Run
 
 ```bash
-# Install dependencies (only needed once)
+# Install dependencies
 npm install
 
 # Start the development server
@@ -49,22 +52,27 @@ npm run lint
 ```
 src/
 ├── app/                    # Next.js App Router pages
-│   ├── layout.tsx          # Root layout (Header + Footer)
+│   ├── layout.tsx          # Root layout (Metadata, Schema, Header, Footer)
 │   ├── page.tsx            # Homepage
-│   ├── about/page.tsx      # About Us page
+│   ├── sitemap.ts          # Production sitemap generator
+│   ├── robots.ts           # Production robots.txt generator
+│   ├── not-found.tsx       # Branded 404 page
+│   ├── about/page.tsx      # About page
 │   ├── services/
 │   │   ├── page.tsx        # Services index
 │   │   └── [slug]/page.tsx # Individual service pages
-│   ├── projects/page.tsx   # Projects page
-│   ├── contact/page.tsx    # Contact / consultation form
+│   ├── projects/page.tsx   # Architectural blueprints & scenarios
+│   ├── contact/page.tsx    # Consultation request form
+│   ├── api/contact/route.ts# Validated consultation API route
 │   ├── privacy/page.tsx    # Privacy policy
 │   └── terms/page.tsx      # Terms of service
 ├── components/
 │   ├── layout/
-│   │   ├── Header.tsx      # Responsive header + mobile menu
-│   │   └── Footer.tsx      # Footer with service links
+│   │   ├── Header.tsx      # Responsive header + mobile drawer
+│   │   └── Footer.tsx      # Editorial footer with navigation
 │   ├── home/               # Homepage section components
 │   │   ├── HeroSection.tsx
+│   │   ├── HeroVisualComposition.tsx
 │   │   ├── ServicesSection.tsx
 │   │   ├── AboutSection.tsx
 │   │   ├── WhyWorkWithUsSection.tsx
@@ -73,13 +81,15 @@ src/
 │   │   ├── ProjectsSection.tsx
 │   │   ├── SupportCTASection.tsx
 │   │   └── ConsultationCTASection.tsx
+│   ├── theme/              # Dark/light theme provider & toggle
 │   └── ui/
-│       ├── Logo.tsx         # Custom SVG logo
-│       └── SectionHeading.tsx
+│       ├── Logo.tsx        # Custom architectural SVG monogram & wordmark
+│       ├── CustomCursor.tsx# Subtle interactive cursor
+│       └── EditorialCanvas.tsx
 ├── data/
-│   ├── services.ts          # All 7 service definitions
-│   └── projects.ts          # Illustrative project examples
-└── app/globals.css          # Tailwind v4 theme + global styles
+│   ├── services.ts         # All 7 core service definitions
+│   └── projects.ts         # Architectural blueprints & demonstration scenarios
+└── app/globals.css         # Tailwind v4 theme + dark/light color tokens
 ```
 
 ## Services
@@ -92,19 +102,7 @@ src/
 6. IT Support & Maintenance
 7. Cybersecurity
 
-## Design System
+## Production Deployment & Webhooks
 
-| Token | Value |
-|---|---|
-| Background | `#07111F` |
-| Surface | `#10243B` |
-| Primary Blue | `#1688D4` |
-| Cyan Accent | `#42B9FF` |
-| Main Text | `#F3F7FC` |
-| Muted Text | `#A9B9CC` |
-
-## Notes
-
-- Project examples on the Projects page are **illustrative scenarios**, not real client work.
-- Contact form is a client-side UI only — no backend connected yet.
-- Contact details (email, phone, address) are placeholders pending company confirmation.
+- **Hosting**: Vercel (Next.js App Router optimized).
+- **Consultation Form Intake**: Handled by `/api/contact`. Server-side validation with rate-limiting and bot mitigation. Forwarding to external webhook endpoints (Slack, Discord, CRM) is enabled via the `CONTACT_WEBHOOK_URL` environment variable.

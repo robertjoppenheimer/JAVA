@@ -49,7 +49,7 @@ export function HeroSection() {
             <span className="font-semibold text-[var(--foreground-subtle)]">[ 00 // OVERVIEW ]</span>
             <span className="h-3 w-px bg-[var(--border-strong)]" aria-hidden="true" />
             <span className="text-[var(--foreground-secondary)] uppercase tracking-widest text-[11px]">
-              Java Solutions // Enterprise Architecture
+              Autocratic // Enterprise Architecture
             </span>
           </div>
 
@@ -135,7 +135,7 @@ export function HeroSection() {
               99.99%
             </span>
             <span className="text-[var(--foreground-muted)] uppercase tracking-wider text-[10px] mt-1 block">
-              Multi-AZ SLA Target
+              Multi-AZ Architecture Target
             </span>
           </div>
 
