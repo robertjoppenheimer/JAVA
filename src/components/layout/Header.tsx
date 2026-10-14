@@ -41,6 +41,30 @@ export function Header() {
     };
   }, [mobileOpen]);
 
+  // Handle Escape key to close mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileOpen]);
+
+  // Automatically close mobile menu if viewport expands to desktop
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 768px)");
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        setMobileOpen(false);
+      }
+    };
+    mql.addEventListener("change", handleMediaChange);
+    return () => mql.removeEventListener("change", handleMediaChange);
+  }, []);
+
   const closeMobile = () => setMobileOpen(false);
 
   const isActive = (href: string) => {

@@ -18,7 +18,14 @@ interface SubmissionResponse {
 
 function resolveInitialService(param: string | null): string {
   if (!param) return "";
-  const decoded = decodeURIComponent(param).toLowerCase();
+  const decoded = decodeURIComponent(param).toLowerCase().trim();
+  if (
+    decoded.includes("general it") ||
+    decoded.includes("assessment") ||
+    decoded.includes("modernization")
+  ) {
+    return "General IT Infrastructure Assessment";
+  }
   const matched = services.find(
     (s) =>
       s.title.toLowerCase() === decoded ||
@@ -492,6 +499,12 @@ function ContactFormInner() {
   );
 }
 
+function ContactFormContent() {
+  const searchParams = useSearchParams();
+  const serviceKey = searchParams.get("service") || "default";
+  return <ContactFormInner key={serviceKey} />;
+}
+
 export default function ContactPage() {
   return (
     <div className="pt-28 pb-24 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-200">
@@ -524,7 +537,7 @@ export default function ContactPage() {
       <section className="py-20 sm:py-28">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <Suspense fallback={<div className="py-16 text-center text-xs font-mono text-[var(--foreground-subtle)]">Loading consultation form...</div>}>
-            <ContactFormInner />
+            <ContactFormContent />
           </Suspense>
         </div>
       </section>

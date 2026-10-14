@@ -177,6 +177,21 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
+    // 9. Fail-safe verification: prevent silent data loss if neither local persistence nor webhook succeeded
+    if (!localPersisted && !webhookDelivered) {
+      console.error(
+        `[Contact API] Critical: Enquiry ${referenceId} could not be persisted locally or delivered via webhook.`
+      );
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "We were temporarily unable to record your inquiry due to a storage failure. Please try again or reach out to our team directly.",
+        },
+        { status: 500 }
+      );
+    }
+
     // Server-side audit log
     console.log(
       `[Contact API] Inquiry confirmed: ${referenceId} from ${submissionRecord.email} for ${submissionRecord.service} (persisted: ${localPersisted}, webhook: ${webhookDelivered})`

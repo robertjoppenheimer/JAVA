@@ -53,6 +53,13 @@ test("Production Site Navigation & Routes", async (t) => {
     "/services/cybersecurity",
     "/sitemap.xml",
     "/robots.txt",
+    "/contact?service=IT%20Infrastructure%20%26%20Systems%20Administration",
+    "/contact?service=Enterprise%20Networking%20Solutions",
+    "/contact?service=Cloud%20Solutions%20%26%20AWS%20Architecture",
+    "/contact?service=Odoo%20ERP%20Implementation%20%26%20Customization",
+    "/contact?service=Web%20Engineering%20%26%20Digital%20Solutions",
+    "/contact?service=IT%20Support%20%26%20Managed%20Maintenance",
+    "/contact?service=Cybersecurity%20%26%20Threat%20Hardening",
   ];
 
   for (const route of routes) {
@@ -67,6 +74,13 @@ test("Production Site Navigation & Routes", async (t) => {
     const res = await request("/this-page-does-not-exist-test-404");
     assert.equal(res.status, 404);
     assert.ok(res.text.includes("The requested system path does not exist"));
+  });
+
+  await t.test("Header contains responsive mobile navigation drawer and aria markup", async () => {
+    const res = await request("/");
+    assert.ok(res.text.includes("id=\"mobile-navigation\""), "Expected mobile navigation drawer ID");
+    assert.ok(res.text.includes("aria-controls=\"mobile-navigation\""), "Expected aria-controls trigger");
+    assert.ok(res.text.includes("Switch to light theme") || res.text.includes("Switch to dark theme") || res.text.includes("Appearance"));
   });
 });
 
