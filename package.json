@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit",
+    "test": "node --test tests/e2e.test.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.3",
