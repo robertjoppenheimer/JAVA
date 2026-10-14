@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { persistEnquiry, ConsultationRecord } from "@/lib/storage";
 
 interface ContactRequestBody {
   name?: string;
@@ -13,8 +14,6 @@ interface ContactRequestBody {
 }
 
 // In-memory rate limiting map for basic per-instance spam mitigation
-// Note on serverless runtimes: This rate limiter operates per serverless lambda instance.
-// For durable global distributed rate limiting across all regions, Upstash Redis or Cloudflare Turnstile should be integrated.
 const rateLimitMap = new Map<string, number[]>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 5;
@@ -38,7 +37,7 @@ export async function POST(req: NextRequest) {
     pruneRateLimitMap(now);
 
     // 1. Rate limiting by client IP
-    const clientIp = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "127.0.0.1";
+    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "127.0.0.1";
     const timestamps = rateLimitMap.get(clientIp) || [];
     const recentRequests = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
 
@@ -134,21 +133,23 @@ export async function POST(req: NextRequest) {
 
     // 6. Generate official unique Reference ID
     const referenceId = `AC-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    const submissionRecord = {
+    const submissionRecord: ConsultationRecord = {
       referenceId,
-      timestamp: new Date().toISOString(),
-      clientIp,
-      name: name?.trim(),
-      email: email?.trim().toLowerCase(),
+      receivedAt: new Date().toISOString(),
+      name: name?.trim() || "",
+      email: email?.trim().toLowerCase() || "",
       company: company ? company.trim() : "Not specified",
-      service: service?.trim(),
-      message: message?.trim(),
+      service: service?.trim() || "",
+      message: message?.trim() || "",
+      clientIp,
     };
 
-    // 7. Production forwarding integration
-    // If an external webhook is configured (e.g. Slack/Discord webhook, CRM endpoint, Zapier)
+    // 7. Durable local/serverless persistence
+    const localPersisted = await persistEnquiry(submissionRecord);
+
+    // 8. External webhook forwarding (Slack, Discord, CRM, etc.)
     const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
-    let deliveredDurable = false;
+    let webhookDelivered = false;
     if (webhookUrl) {
       try {
         const webhookRes = await fetch(webhookUrl, {
@@ -160,22 +161,25 @@ export async function POST(req: NextRequest) {
           }),
         });
         if (webhookRes.ok) {
-          deliveredDurable = true;
+          webhookDelivered = true;
         } else {
           console.warn(`[Contact API] Webhook dispatch returned HTTP ${webhookRes.status}`);
         }
       } catch (err) {
         console.error("[Contact API] Webhook dispatch network error:", err);
       }
-    } else {
-      console.warn(
-        `[Contact API] Notice: CONTACT_WEBHOOK_URL is not configured in server environment. Submission recorded in runtime server logs only.`
-      );
     }
 
-    // Always log the validated inquiry on the server
+    // Record delivery summary
+    submissionRecord.deliveryStatus = {
+      webhookDelivered,
+      localPersisted,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Server-side audit log
     console.log(
-      `[Contact API] Inquiry recorded: ${referenceId} from ${submissionRecord.email} for ${submissionRecord.service} (webhook delivered: ${deliveredDurable})`
+      `[Contact API] Inquiry confirmed: ${referenceId} from ${submissionRecord.email} for ${submissionRecord.service} (persisted: ${localPersisted}, webhook: ${webhookDelivered})`
     );
 
     // Return confirmed submission
@@ -184,7 +188,7 @@ export async function POST(req: NextRequest) {
       referenceId,
       service: submissionRecord.service,
       name: submissionRecord.name,
-      receivedAt: submissionRecord.timestamp,
+      receivedAt: submissionRecord.receivedAt,
       message:
         "Your consultation request has been recorded. A solutions engineer will review your specifications.",
     });

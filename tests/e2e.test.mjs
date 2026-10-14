@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import http from "node:http";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 const BASE_URL = "http://localhost:3005";
 
@@ -131,10 +133,15 @@ test("Contact & Consultation API Flow", async (t) => {
     assert.equal(res.json?.success, false);
   });
 
-  await t.test("Accept and record valid consultation request with reference ID", async () => {
+  let savedReferenceId = "";
+
+  await t.test("Accept and durably persist valid consultation request with reference ID", async () => {
     const res = await request("/api/contact", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Forwarded-For": "198.51.100.99",
+      },
       body: {
         name: "DevOps Architect",
         email: "architect@tech-firm.com",
@@ -148,6 +155,15 @@ test("Contact & Consultation API Flow", async (t) => {
     assert.equal(res.json?.success, true);
     assert.ok(res.json?.referenceId?.startsWith("AC-"));
     assert.equal(res.json?.service, "Cloud Solutions & AWS Architecture");
+    savedReferenceId = res.json.referenceId;
+  });
+
+  await t.test("Verify enquiry actually exists in local durable storage file", async () => {
+    const storagePath = path.join(process.cwd(), ".data", "enquiries.jsonl");
+    const raw = await fs.readFile(storagePath, "utf8");
+    assert.ok(raw.includes(savedReferenceId), "Persisted file must contain the generated reference ID");
+    assert.ok(raw.includes("architect@tech-firm.com"), "Persisted file must contain submitted email");
+    assert.ok(raw.includes("Apex Technology Partners"), "Persisted file must contain submitted company");
   });
 
   await t.test("Reject GET request with HTTP 405 Method Not Allowed", async () => {
